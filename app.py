@@ -3,12 +3,12 @@ from flask_mail import Mail, Message
 import MySQLdb
 
 app = Flask(__name__)
-app.secret_key = 'b7e2f8c1-4a6d-4e2a-9c3e-7f1a2b5d6c8e'
+app.secret_key = 'b7e2f8c1-4a6d-4e2a-9c3e-*********'
 
 # MySQL config (update with your credentials)
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '1234'
+app.config['MYSQL_PASSWORD'] = '****'
 app.config['MYSQL_DB'] = 'reservations'
 
 # Email config (update with your credentials)
@@ -369,4 +369,5 @@ def user_cancel(booking_id):
     return redirect(url_for('user_bookings'))
 
 if __name__ == '__main__':
+
     app.run(debug=True) 
