@@ -1,0 +1,4 @@
+Flask
+Flask-MySQLdb
+Flask-Mail
+mysql-connector-python 
