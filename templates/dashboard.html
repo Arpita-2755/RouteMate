@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Routemate</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .dashboard-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .action-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(59,124,106,0.10);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 2px solid transparent;
+        }
+        .action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 24px rgba(59,124,106,0.15);
+            border-color: var(--primary);
+        }
+        .action-card h3 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .action-card p {
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+        .action-card a {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--secondary);
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+        .action-card a:hover {
+            background: var(--secondary);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="navbar-logo">
+                <img src="/static/logo.png" alt="Routemate Logo">
+                <span>RouteMate</span>
+            </div>
+            <nav>
+                <a href="/" {% if request.path == '/' %}class="active"{% endif %}>Home</a>
+                {% if session.get('user_id') %}
+                    <a href="/dashboard" class="active">Dashboard</a>
+                    <a href="/logout">Logout</a>
+                {% else %}
+                    <a href="/login" {% if request.path == '/login' %}class="active"{% endif %}>Login</a>
+                    <a href="/register" {% if request.path == '/register' %}class="active"{% endif %}>Register</a>
+                {% endif %}
+                <a href="/about" {% if request.path == '/about' %}class="active"{% endif %}>About Us</a>
+                <a href="/feedback" {% if request.path == '/feedback' %}class="active"{% endif %}>Feedback</a>
+                <a href="/contact" {% if request.path == '/contact' %}class="active"{% endif %}>Contact Us</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="card fade-in-up">
+            <h2>Welcome back, {{ user_name }}! </h2>
+            <p style="color: var(--secondary); font-size: 1.1rem; margin-bottom: 2rem;">Manage your travel plans and bookings from your personal dashboard.</p>
+            
+            {% if is_admin %}
+                <h3 style="color: var(--secondary); margin: 2rem 0 1rem 0;">Admin Actions</h3>
+                <div class="dashboard-actions">
+                    <div class="action-card">
+                        <h3>📋 View Bookings</h3>
+                        <p>Check bookings for specific buses and manage reservations.</p>
+                        <a href="/admin/bookings">View Bookings</a>
+                    </div>
+                    <div class="action-card">
+                        <h3>➕ Add Bus Route</h3>
+                        <p>Create new bus routes with detailed scheduling information.</p>
+                        <a href="/admin/add_bus">Add Route</a>
+                    </div>
+                    <div class="action-card">
+                        <h3>️ Manage Routes</h3>
+                        <p>View all bus routes and delete outdated schedules.</p>
+                        <a href="/admin/buses">Manage Routes</a>
+                    </div>
+                    <div class="action-card">
+                        <h3> Date Reports</h3>
+                        <p>Generate reports for bookings on specific dates.</p>
+                        <a href="/admin/bookings_by_date">View by Date</a>
+                    </div>
+                </div>
+            {% else %}
+                <h3 style="color: var(--secondary); margin: 2rem 0 1rem 0;">Quick Actions</h3>
+                <div class="dashboard-actions">
+                    <div class="action-card">
+                        <h3>🎫 Book a Ticket</h3>
+                        <p>Search for available buses and book your journey with ease.</p>
+                        <a href="/user/book">Book Now</a>
+                    </div>
+                    <div class="action-card">
+                        <h3>📋 My Bookings</h3>
+                        <p>View all your current and past bookings, manage cancellations.</p>
+                        <a href="/user/bookings">View Bookings</a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+    <button id="darkModeToggle" class="btn" style="position:fixed;bottom:2rem;right:2rem;z-index:200;">🌙 Dark Mode</button>
+    <footer>
+        <p>&copy; 2025 Routemate | Developed by Arpita Mishra</p>
+    </footer>
+    <script>
+        document.querySelectorAll('.fade-in-up').forEach((el, i) => {
+            el.style.opacity = 0;
+            setTimeout(() => {
+                el.style.transition = 'opacity 1.2s';
+                el.style.opacity = 1;
+            }, 200 + i * 150);
+        });
+        const toggle = document.getElementById('darkModeToggle');
+        function setDarkMode(on) {
+            if (on) {
+                document.body.classList.add('dark-mode');
+                toggle.textContent = '☀️ Light Mode';
+                localStorage.setItem('darkMode', 'on');
+            } else {
+                document.body.classList.remove('dark-mode');
+                toggle.textContent = '🌙 Dark Mode';
+                localStorage.setItem('darkMode', 'off');
+            }
+        }
+        if (localStorage.getItem('darkMode') === 'on') {
+            setDarkMode(true);
+        }
+        toggle.onclick = () => {
+            setDarkMode(!document.body.classList.contains('dark-mode'));
+        };
+    </script>
+</body>
+</html> 

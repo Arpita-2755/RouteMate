@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Routemate</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="navbar-logo">
+                <img src="/static/logo.png" alt="Routemate Logo">
+                <span>RouteMate</span>
+            </div>
+            <nav>
+                <a href="/" {% if request.path == '/' %}class="active"{% endif %}>Home</a>
+                {% if session.get('user_id') %}
+                    <a href="/dashboard" {% if request.path == '/dashboard' %}class="active"{% endif %}>Dashboard</a>
+                    <a href="/logout">Logout</a>
+                {% else %}
+                    <a href="/login" {% if request.path == '/login' %}class="active"{% endif %}>Login</a>
+                    <a href="/register" {% if request.path == '/register' %}class="active"{% endif %}>Register</a>
+                {% endif %}
+                <a href="/about" class="active">About Us</a>
+                <a href="/feedback" {% if request.path == '/feedback' %}class="active"{% endif %}>Feedback</a>
+                <a href="/contact" {% if request.path == '/contact' %}class="active"{% endif %}>Contact Us</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="card fade-in-up">
+            <h2>About Us</h2>
+            <p>Welcome to RouteMate – Your Smart Companion for Hassle-Free Bus Booking.</p>
+            <p>At RouteMate, we believe that booking a bus ticket should be as simple as planning your trip. Designed with both users and technology in mind, our platform makes it easy to search, compare, and book bus tickets with just a few clicks. Whether you're commuting across cities or planning a weekend getaway, RouteMate is built to deliver a seamless experience.</p>
+            <p>But RouteMate is more than just a booking platform – it’s a smart system powered by Data Structures & Algorithms (DSA) that ensures efficient queue management, real-time seat tracking, and fair booking distribution. Our intuitive dashboard empowers both passengers and administrators with powerful tools for managing routes, tracking bookings, and making data-informed decisions.</p>
+            <p>We are passionate about using technology to remove the stress from travel planning. With RouteMate, you’ll never worry about full buses, long queues, or confusing schedules again.</p>
+            <p><strong>Join us and simplify your journey – because every seat deserves a smart mate.</strong></p>
+        </div>
+    </main>
+    <button id="darkModeToggle" class="btn" style="position:fixed;bottom:2rem;right:2rem;z-index:200;">🌙 Dark Mode</button>
+    <footer>
+        <p>&copy; 2025 Routemate | Developed by Arpita Mishra</p>
+    </footer>
+    <script>
+        document.querySelectorAll('.fade-in-up').forEach((el, i) => {
+            el.style.opacity = 0;
+            setTimeout(() => {
+                el.style.transition = 'opacity 1.2s';
+                el.style.opacity = 1;
+            }, 200 + i * 150);
+        });
+        const toggle = document.getElementById('darkModeToggle');
+        function setDarkMode(on) {
+            if (on) {
+                document.body.classList.add('dark-mode');
+                toggle.textContent = '☀️ Light Mode';
+                localStorage.setItem('darkMode', 'on');
+            } else {
+                document.body.classList.remove('dark-mode');
+                toggle.textContent = '🌙 Dark Mode';
+                localStorage.setItem('darkMode', 'off');
+            }
+        }
+        if (localStorage.getItem('darkMode') === 'on') {
+            setDarkMode(true);
+        }
+        toggle.onclick = () => {
+            setDarkMode(!document.body.classList.contains('dark-mode'));
+        };
+    </script>
+</body>
+</html> 

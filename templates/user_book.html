@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Ticket - Routemate</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="navbar-logo">
+                <img src="/static/logo.png" alt="Routemate Logo">
+                <span>RouteMate</span>
+            </div>
+            <nav>
+                <a href="/" {% if request.path == '/' %}class="active"{% endif %}>Home</a>
+                {% if session.get('user_id') %}
+                    <a href="/dashboard" {% if request.path == '/dashboard' %}class="active"{% endif %}>Dashboard</a>
+                    <a href="/logout">Logout</a>
+                {% else %}
+                    <a href="/login" {% if request.path == '/login' %}class="active"{% endif %}>Login</a>
+                    <a href="/register" {% if request.path == '/register' %}class="active"{% endif %}>Register</a>
+                {% endif %}
+                <a href="/about" {% if request.path == '/about' %}class="active"{% endif %}>About Us</a>
+                <a href="/feedback" {% if request.path == '/feedback' %}class="active"{% endif %}>Feedback</a>
+                <a href="/contact" {% if request.path == '/contact' %}class="active"{% endif %}>Contact Us</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="card fade-in-up">
+            <h2>Book a Ticket</h2>
+            <form method="post">
+                <input type="text" name="bus_from" placeholder="From" required>
+                <input type="text" name="bus_to" placeholder="To" required>
+                <button type="submit">Search Buses</button>
+            </form>
+            {% if buses %}
+            <h3>Available Buses</h3>
+            <table>
+                <tr>
+                    <th>ID</th><th>From</th><th>To</th><th>Start</th><th>Duration</th><th>Arrival</th><th>Fare</th><th>Seats</th><th>Book</th>
+                </tr>
+                {% for bus in buses %}
+                <tr>
+                    <td>{{ bus[0] }}</td>
+                    <td>{{ bus[1] }}</td>
+                    <td>{{ bus[2] }}</td>
+                    <td>{{ bus[3] }}</td>
+                    <td>{{ bus[4] }}</td>
+                    <td>{{ bus[5] }}</td>
+                    <td>{{ bus[6] }}</td>
+                    <td>{{ bus[7] }}</td>
+                    <td><a href="/user/book/confirm/{{ bus[0] }}">Book</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+        </div>
+    </main>
+    <button id="darkModeToggle" class="btn" style="position:fixed;bottom:2rem;right:2rem;z-index:200;">🌙 Dark Mode</button>
+    <footer>
+        <p>&copy; 2025 Routemate | Developed by Arpita Mishra</p>
+    </footer>
+    <script>
+        document.querySelectorAll('.fade-in-up').forEach((el, i) => {
+            el.style.opacity = 0;
+            setTimeout(() => {
+                el.style.transition = 'opacity 1.2s';
+                el.style.opacity = 1;
+            }, 200 + i * 150);
+        });
+        const toggle = document.getElementById('darkModeToggle');
+        function setDarkMode(on) {
+            if (on) {
+                document.body.classList.add('dark-mode');
+                toggle.textContent = '☀️ Light Mode';
+                localStorage.setItem('darkMode', 'on');
+            } else {
+                document.body.classList.remove('dark-mode');
+                toggle.textContent = '🌙 Dark Mode';
+                localStorage.setItem('darkMode', 'off');
+            }
+        }
+        if (localStorage.getItem('darkMode') === 'on') {
+            setDarkMode(true);
+        }
+        toggle.onclick = () => {
+            setDarkMode(!document.body.classList.contains('dark-mode'));
+        };
+    </script>
+</body>
+</html> 

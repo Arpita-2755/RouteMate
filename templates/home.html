@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Routemate - Never Miss a Seat Again!</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .hero-section {
+            position: relative;
+            height: 420px;
+            margin-bottom: 2rem;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: url('/static/home_bg.png') center/cover no-repeat;
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            color: #fff;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+            padding: 0 2rem;
+        }
+        /* Optional: make buttons and cards pop on image */
+        .hero-content .cta-btn,
+        .hero-content .quick-search {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .hero-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .hero-logo img {
+            height: 80px;
+            width: 80px;
+            border-radius: 16px;
+            background: var(--accent);
+            box-shadow: 0 4px 16px rgba(59, 124, 106, 0.15);
+        }
+        .hero-logo h1 {
+            font-size: 3.5rem;
+            color: #fff;
+            font-weight: 800;
+            text-shadow: 0 2px 12px #00000044;
+            margin: 0;
+        }
+        .quick-search {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin: 2rem auto 0 auto;
+            max-width: 500px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+        }
+        .quick-search input {
+            width: 120px;
+            margin: 0;
+        }
+        .travel-tips {
+            margin: 2.5rem auto 0 auto;
+            max-width: 900px;
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .tip-card {
+            background: var(--accent);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(59,124,106,0.10);
+            padding: 1.2rem 1.5rem;
+            max-width: 260px;
+            min-width: 200px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .tip-card span {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        @media (max-width: 900px) {
+            .travel-tips { flex-direction: column; gap: 1.2rem; }
+            .quick-search { flex-direction: column; }
+            .hero-section { height: 300px; }
+            .hero-logo h1 { font-size: 2.2rem; }
+        }
+        @media (max-width: 600px) {
+            .hero-section, .hero-content { min-height: 320px; padding-top: 60px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="navbar-logo">
+                <img src="/static/logo.png" alt="Routemate Logo">
+                <span>RouteMate</span>
+            </div>
+            <nav>
+                <a href="/" class="active">Home</a>
+                {% if session.get('user_id') %}
+                    <a href="/dashboard" {% if request.path == '/dashboard' %}class="active"{% endif %}>Dashboard</a>
+                    <a href="/logout">Logout</a>
+                {% else %}
+                    <a href="/login" {% if request.path == '/login' %}class="active"{% endif %}>Login</a>
+                    <a href="/register" {% if request.path == '/register' %}class="active"{% endif %}>Register</a>
+                {% endif %}
+                <a href="/about" {% if request.path == '/about' %}class="active"{% endif %}>About Us</a>
+                <a href="/feedback" {% if request.path == '/feedback' %}class="active"{% endif %}>Feedback</a>
+                <a href="/contact" {% if request.path == '/contact' %}class="active"{% endif %}>Contact Us</a>
+            </nav>
+        </div>
+    </header>
+    <section class="hero-section fade-in-up">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-logo">
+                <img src="/static/logo.png" alt="Routemate Logo">
+                <h1>Welcome to RouteMate</h1>
+            </div>
+            <p class="tagline" style="font-size:1.6rem;">Your journey starts here – discover new places, book your seat, and travel smart!</p>
+            <a href="/register" class="cta-btn" style="margin-bottom:1.5rem;">Get Started</a>
+            <form class="quick-search" method="get" action="/user/book">
+                <input type="text" name="bus_from" placeholder="From" required>
+                <input type="text" name="bus_to" placeholder="To" required>
+                <button type="submit" class="btn">Find Buses</button>
+            </form>
+        </div>
+    </section>
+    <main>
+        <div class="hero-destinations">
+            <h3>Featured Destinations</h3>
+            <div class="destinations-list">
+                <div class="destination-card fade-in-up">
+                    <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Mountains">
+                    <span>Mountain Escapes</span>
+                </div>
+                <div class="destination-card fade-in-up" style="animation-delay:0.2s;">
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80" alt="Beach">
+                    <span>Sunny Beaches</span>
+                </div>
+                <div class="destination-card fade-in-up" style="animation-delay:0.4s;">
+                    <img src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=400&q=80" alt="City">
+                    <span>City Lights</span>
+                </div>
+            </div>
+        </div>
+        <div class="card fade-in-up" style="animation-delay:0.6s;">
+            <h2>Why Choose RouteMate?</h2>
+            <ul class="features-list" style="text-align:left; max-width:600px; margin:2rem auto; font-size:1.1rem;">
+                <li>🔎 <b>Smart Search:</b> Instantly find and compare bus routes across the country.</li>
+                <li>🚌 <b>Live Seat Tracking:</b> See available seats in real time and book instantly.</li>
+                <li>📊 <b>Personal Dashboard:</b> Manage your bookings, view history, and get travel insights.</li>
+                <li>⚡ <b>Fast & Secure:</b> Enjoy quick, fair, and secure queue management.</li>
+                <li>💬 <b>24/7 Support:</b> Get instant help and feedback from our team.</li>
+            </ul>
+        </div>
+        <div class="travel-tips fade-in-up" style="animation-delay:0.7s;">
+            <div class="tip-card">
+                <span>🧳</span>
+                <b>Pack Smart</b>
+                <p>Travel light and keep essentials handy for a comfortable journey.</p>
+            </div>
+            <div class="tip-card">
+                <span>⏰</span>
+                <b>Arrive Early</b>
+                <p>Reach the bus stop 15 minutes before departure to avoid last-minute rush.</p>
+            </div>
+            <div class="tip-card">
+                <span>📱</span>
+                <b>Stay Connected</b>
+                <p>Use RouteMate to track your bus and get real-time updates on your trip.</p>
+            </div>
+        </div>
+        <div class="card testimonials fade-in-up" style="animation-delay:0.8s;">
+            <h3>What Our Travelers Say</h3>
+            <div class="testimonial-list">
+                <blockquote>
+                    <p>"RouteMate made my trip so easy and stress-free!"</p>
+                    <footer>– Priya S.</footer>
+                </blockquote>
+                <blockquote>
+                    <p>"The best bus booking experience I've ever had."</p>
+                    <footer>– Rahul K.</footer>
+                </blockquote>
+                <blockquote>
+                    <p>"Beautiful design and super simple to use."</p>
+                    <footer>– Ayesha M.</footer>
+                </blockquote>
+            </div>
+        </div>
+        <div class="card fade-in-up" style="animation-delay:0.9s;text-align:center;">
+            <h2>Ready to start your next adventure?</h2>
+            <a href="/register" class="cta-btn" style="font-size:1.3rem;">Sign Up Now</a>
+        </div>
+    </main>
+    <button id="darkModeToggle" class="btn" style="position:fixed;bottom:2rem;right:2rem;z-index:200;">🌙 Dark Mode</button>
+    <footer>
+        <p>&copy; 2025 Routemate | Developed by Arpita Mishra</p>
+    </footer>
+    <script>
+        document.querySelectorAll('.fade-in-up').forEach((el, i) => {
+            el.style.opacity = 0;
+            setTimeout(() => {
+                el.style.transition = 'opacity 1.2s';
+                el.style.opacity = 1;
+            }, 200 + i * 150);
+        });
+        const toggle = document.getElementById('darkModeToggle');
+        function setDarkMode(on) {
+            if (on) {
+                document.body.classList.add('dark-mode');
+                toggle.textContent = '☀️ Light Mode';
+                localStorage.setItem('darkMode', 'on');
+            } else {
+                document.body.classList.remove('dark-mode');
+                toggle.textContent = '🌙 Dark Mode';
+                localStorage.setItem('darkMode', 'off');
+            }
+        }
+        if (localStorage.getItem('darkMode') === 'on') {
+            setDarkMode(true);
+        }
+        toggle.onclick = () => {
+            setDarkMode(!document.body.classList.contains('dark-mode'));
+        };
+    </script>
+</body>
+</html> 
